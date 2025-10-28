@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Đỗ Huỳnh Gia Vĩ - Cyberpunk Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="MI.css" />
+</head>
+<body>
+  <div class="bg-anim"></div>
+
+  <div class="page">
+    <main class="container">
+      <!-- ẢNH ĐẠI DIỆN + NÚT -->
+      <section class="profile-card glass card-elevated">
+        <div class="avatar-wrap">
+          <img id="profile-img" class="profile-img" src="vi.jpg" alt="Ảnh đại diện">
+          <div class="avatar-glow"></div>
+        </div>
+
+        <div class="actions">
+          <button class="nav-btn ripple" data-target="info">👤 Profile</button>
+          <button class="nav-btn ripple" data-target="weather">🌤️ Weather</button>
+          <button class="nav-btn ripple" data-target="currency">💵 Currency</button>
+        </div>
+      </section>
+
+      <!-- KHỐI CHỨA CỐ ĐỊNH CHO NỘI DUNG -->
+      <div class="content-wrapper">
+        <!-- 👤 PROFILE -->
+        <section id="info" class="content-section glass card-elevated">
+          <h3 class="section-title">👤 Profile</h3>
+          <div class="info-text">
+            <p><strong>Họ và tên:</strong> Đỗ Huỳnh Gia Vĩ</p>
+            <p><strong>Ngày sinh:</strong> 11/09/2004</p>
+            <p><strong>Trường:</strong> Đại học Khoa học Tự nhiên</p>
+            <p><strong>Ngành học:</strong> Vật lý Tin học</p>
+            <p><strong>Sở thích:</strong> Lập trình nhúng, IoT, tự động hóa và AI.</p>
+          </div>
+        </section>
+
+        <!-- 🌤️ WEATHER -->
+        <section id="weather" class="content-section glass card-elevated">
+          <h3 class="section-title">🌤️ Weather</h3>
+          <div class="weather-controls">
+            <input id="city-input" type="text" placeholder="Nhập tên thành phố (VD: Hà Nội)" />
+            <button id="search-btn" class="ripple">Tìm kiếm</button>
+          </div>
+          <div id="current-weather" class="weather-box">
+            <div class="placeholder">Nhập thành phố để xem thời tiết.</div>
+          </div>
+        </section>
+
+        <!-- 💵 CURRENCY -->
+        <section id="currency" class="content-section glass card-elevated">
+          <h3 class="section-title">💵 Currency</h3>
+          <div class="exchange-grid">
+            <input id="usd-input" type="number" placeholder="Nhập số tiền (USD)" min="0" />
+            <button id="convert-btn" class="ripple">Quy đổi</button>
+            <div id="exchange-rate" class="result muted"></div>
+            <div id="converted-result" class="result big"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="Matmoi.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Hiệu ứng ripple
+      function attachRipple(el) {
+        el.addEventListener('click', function (e) {
+          const circle = document.createElement('span');
+          circle.className = 'ripple-circle';
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          circle.style.width = circle.style.height = size + 'px';
+          circle.style.left = (e.clientX - rect.left - size / 2) + 'px';
+          circle.style.top = (e.clientY - rect.top - size / 2) + 'px';
+          this.appendChild(circle);
+          setTimeout(() => circle.remove(), 700);
+        });
+      }
+
+      document.querySelectorAll('.ripple').forEach(btn => attachRipple(btn));
+
+      // Gán sự kiện nút chuyển section
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const target = btn.getAttribute('data-target');
+          if (typeof showSection === 'function') {
+            showSection(target);
+          } else {
+            // fallback nếu chưa có showSection
+            document.querySelectorAll('.content-section').forEach(s => {
+              s.style.display = 'none';
+              s.classList.remove('active');
+            });
+            const t = document.getElementById(target);
+            if (t) {
+              t.style.display = 'block';
+              setTimeout(() => t.classList.add('active'), 50);
+            }
+          }
+          e.preventDefault();
+        });
+      });
+
+      // ✅ Ẩn toàn bộ phần nội dung khi mới tải trang
+      document.querySelectorAll('.content-section').forEach(sec => {
+        sec.style.display = 'none';
+        sec.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>
