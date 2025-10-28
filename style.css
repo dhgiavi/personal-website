@@ -1,101 +1,285 @@
-/* 🌤️ CSS - Dự báo thời tiết  */
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(180deg, #e0f7fa, #ffffff);
-  color: #0277bd;
+/* ===== FONT & RESET ===== */
+* {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top left, #2b0037, #130019 60%);
+  color: #f5e3ff;
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
-.container {
-  max-width: 500px;
-  width: 90%;
-  margin-top: 50px;
-  background: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+/* ===== NỀN ĐỘNG MỜ NHẸ ===== */
+.bg-anim {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255, 0, 120, 0.15), transparent 70%),
+              radial-gradient(circle at 80% 20%, rgba(255, 100, 255, 0.1), transparent 70%);
+  animation: moveBg 12s ease-in-out infinite alternate;
+  z-index: -1;
+  filter: blur(70px);
+}
+
+@keyframes moveBg {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-40px, 40px) scale(1.05); }
+}
+
+/* ===== CARD CHUNG ===== */
+.glass {
+  background: rgba(30, 0, 40, 0.55);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(255, 100, 255, 0.15);
+}
+
+.card-elevated {
   padding: 20px;
-  text-align: center;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 600px;
+  transition: all 0.3s ease;
 }
 
-h1 {
-  color: #0288d1;
-  margin-bottom: 20px;
-}
-
-.search-box {
+/* ===== AVATAR ===== */
+.avatar-wrap {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  align-items: center;
+  position: relative;
 }
 
-.search-box input {
-  flex: 1;
-  padding: 10px 15px;
-  border: 2px solid #0288d1;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 182, 255, 0.6);
+  box-shadow: 0 0 25px rgba(255, 100, 200, 0.6);
+  animation: softGlow 3s infinite alternate ease-in-out;
 }
 
-.search-box input:focus {
-  border-color: #03a9f4;
-  box-shadow: 0 0 5px #03a9f4;
+@keyframes softGlow {
+  from { box-shadow: 0 0 20px rgba(255, 80, 160, 0.6); }
+  to { box-shadow: 0 0 40px rgba(255, 150, 220, 0.9); }
 }
 
-.search-box button {
-  background: #0288d1;
-  color: white;
+/* ===== BUTTONS ===== */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.nav-btn {
+  background: linear-gradient(145deg, #ff8fd8, #ff4dc4);
+  color: #2d002c;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(255, 150, 255, 0.8);
+}
+
+/* ===== RIPPLE HIỆU ỨNG ===== */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: rippleEffect 0.7s linear;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ===== NỘI DUNG HIỂN THỊ ===== */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.content-section {
+  width: 90%;
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s ease;
+  display: none;
+}
+
+.content-section.active {
+  opacity: 1;
+  transform: translateY(0);
+  display: block;
+}
+
+/* ===== TIÊU ĐỀ PHẦN ===== */
+.section-title {
+  font-size: 1.3rem;
+  color: #ff9be9;
+  margin-bottom: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ===== PROFILE TEXT ===== */
+.info-text p {
+  margin-bottom: 8px;
+  color: #e8d8ff;
+  font-size: 1rem;
+}
+
+/* ===== WEATHER ===== */
+.weather-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.weather-controls input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.weather-controls button {
+  background: linear-gradient(145deg, #ff8fd8, #ff4dc4);
+  color: #2d002c;
+  font-weight: 600;
+  border: none;
+  padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
 }
 
-.search-box button:hover {
-  background: #0277bd;
+.weather-controls button:hover {
+  box-shadow: 0 0 10px rgba(255, 150, 255, 0.8);
 }
 
 .weather-box {
-  margin-top: 20px;
-  transition: all 0.3s ease-in-out;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 1rem;
 }
 
-/* Spinner khi đang tải */
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #b3e5fc;
-  border-top: 4px solid #0288d1;
-  border-radius: 50%;
-  margin: 0 auto 10px;
-  animation: spin 1s linear infinite;
+.weather-box p {
+  margin-bottom: 6px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* ===== CURRENCY ===== */
+.exchange-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* Dự báo ngày */
-#forecast div {
-  background: linear-gradient(135deg, #6dcff6, #4fa3e3);
-  color: white;
-  border-radius: 10px;
-  padding: 10px 15px;
-  width: 110px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+.exchange-grid input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1rem;
 }
 
-#forecast img {
-  width: 50px;
-  height: 50px;
+.exchange-grid button {
+  align-self: flex-end;
+  background: linear-gradient(145deg, #ff8fd8, #ff4dc4);
+  color: #2d002c;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.exchange-grid button:hover {
+  box-shadow: 0 0 10px rgba(255, 150, 255, 0.8);
+}
+
+.result {
+  text-align: left;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.result.big {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffc5ff;
+}
+
+/* ===== HIỆU ỨNG SÁNG HỒNG MỖI KHI QUY ĐỔI ===== */
+.glow-effect {
+  animation: glowPulse 0.8s ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+    color: #ff9bd0;
+  }
+  50% {
+    text-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
+    color: #ffb3de;
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+    color: #ff9bd0;
+  }
+}
+
+/* ===== TRẠNG THÁI MỜ ===== */
+.muted {
+  color: #bfa3c7;
+  font-size: 0.9rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .nav-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  .profile-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+  }
 }
